@@ -4,14 +4,14 @@ import argparse
 
 # Argument Parser
 parser = argparse.ArgumentParser(description="A simple Elementary Cellular Automata generator using Wolfram code to determine the transition rules")
-parser.add_argument('-c', '--ca_size', default=71, help='Size/length of the Cellular Automaton')
-parser.add_argument('-g', '--generation_count', default=50, required=False, help='Number of generations to run (-1 runs forever)')
+parser.add_argument('-s', '--size', default=71, help='Size/length of the Cellular Automaton')
+parser.add_argument('-g', '--generations', default=50, required=False, help='Number of generations to run (-1 runs forever)')
 args = parser.parse_args()
 
 DELAY_DURATION_DEFAULT = 0.05 # seconds
 
-CA_SIZE = int(args.ca_size)
-GENERATION_COUNT = int(args.generation_count)
+CA_SIZE = int(args.size)
+GENERATION_COUNT = int(args.generations)
 
 
 def displayPattern(generation):

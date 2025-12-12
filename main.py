@@ -1,9 +1,18 @@
 import numpy as np
 import time
+import argparse
 
-CA_SIZE = 71 # including left and right edge boundaries
-ITERATION_COUNT = 1000
-DELAY_DURATION = 0.05 # seconds
+# Argument Parser
+parser = argparse.ArgumentParser(description="A simple Elementary Cellular Automata generator using Wolfram code to determine the transition rules")
+parser.add_argument('-c', '--ca_size', default=71, help='Size/length of the Cellular Automaton')
+parser.add_argument('-g', '--generation_count', default=50, required=False, help='Number of generations to run (-1 runs forever)')
+args = parser.parse_args()
+
+DELAY_DURATION_DEFAULT = 0.05 # seconds
+
+CA_SIZE = int(args.ca_size)
+GENERATION_COUNT = int(args.generation_count)
+
 
 def displayPattern(generation):
     """Converts a CA generation array (consisting of 0s and 1s) to a pattern of cells and displays it"""
@@ -19,7 +28,7 @@ def main():
     current_generation = initial_generation
     next_generation = np.full(shape = CA_SIZE, dtype=str, fill_value=0)
 
-    print("Wolfram Rule: ")
+    print("Wolfram Rule Number: ")
     wolfram_rule = int(input())
     wolfram_rule_binary = '{0:08b}'.format(wolfram_rule)
 
@@ -32,15 +41,18 @@ def main():
                 "001": wolfram_rule_binary[6],  
                 "000": wolfram_rule_binary[7]}
 
-    for n in range(ITERATION_COUNT):
+    counter = 0
+    while(counter != GENERATION_COUNT):
         displayPattern(current_generation)
-        time.sleep(DELAY_DURATION)
+        time.sleep(DELAY_DURATION_DEFAULT)
         next_generation = np.full(shape = CA_SIZE, dtype=str, fill_value=0)
         for i in range(1, CA_SIZE-1):
             neighbourhood = "".join(current_generation[i-1:i+2])
             new_state = ruleset[neighbourhood]
             next_generation[i] = new_state
         current_generation = next_generation
+        
+        counter+=1
 
 
 if __name__ == "__main__":

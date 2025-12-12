@@ -32,15 +32,6 @@ def main():
     wolfram_rule = int(input())
     wolfram_rule_binary = '{0:08b}'.format(wolfram_rule)
 
-    ruleset = { "111": wolfram_rule_binary[0],
-                "110": wolfram_rule_binary[1],
-                "101": wolfram_rule_binary[2],
-                "100": wolfram_rule_binary[3],
-                "011": wolfram_rule_binary[4],
-                "010": wolfram_rule_binary[5],
-                "001": wolfram_rule_binary[6],  
-                "000": wolfram_rule_binary[7]}
-
     counter = 0
     while(counter != GENERATION_COUNT):
         displayPattern(current_generation)
@@ -48,7 +39,8 @@ def main():
         next_generation = np.full(shape = CA_SIZE, dtype=str, fill_value=0)
         for i in range(1, CA_SIZE-1):
             neighbourhood = "".join(current_generation[i-1:i+2])
-            new_state = ruleset[neighbourhood]
+            neighbourhood_value = int(neighbourhood, base=2) # decimal representation of binary neighbourhood (0 to 7)
+            new_state = wolfram_rule_binary[7-int(neighbourhood_value)] # 7 maps to the MSB, 0 to the LSB
             next_generation[i] = new_state
         current_generation = next_generation
         

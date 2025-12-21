@@ -1,6 +1,8 @@
 import numpy as np
 import time
 import argparse
+import os
+import math
 
 # Argument Parser
 parser = argparse.ArgumentParser(description="A simple Elementary Cellular Automata generator using Wolfram code to determine the transition rules")
@@ -8,17 +10,22 @@ parser.add_argument('-s', '--size', default=71, help='Size/length of the Cellula
 parser.add_argument('-g', '--generations', default=50, required=False, help='Number of generations to run (-1 runs forever)')
 args = parser.parse_args()
 
+# Constants
+CELL_SYMBOL = "\u2588"
+CELL_SIZE = 2
 DELAY_DURATION_DEFAULT = 0.05 # seconds
 
-CA_SIZE = int(args.size)
-GENERATION_COUNT = int(args.generations)
+MAX_CA_SIZE = math.trunc(os.get_terminal_size().columns / CELL_SIZE) + 2
 
+if(int(args.size) > MAX_CA_SIZE):
+    print(f"Size is larger than your console size, defaulting to size {MAX_CA_SIZE}\n")
+CA_SIZE = np.minimum(int(args.size), MAX_CA_SIZE)
+
+GENERATION_COUNT = int(args.generations)
 
 def displayPattern(generation):
     """Converts a CA generation array (consisting of 0s and 1s) to a pattern of cells and displays it"""
-    gen_pattern = np.copy(generation)
-    gen_pattern[generation == "0"] = " "
-    gen_pattern[generation == "1"] = "■"
+    gen_pattern = np.where(generation == "1", CELL_SYMBOL*CELL_SIZE, " "*CELL_SIZE)
     print("".join(gen_pattern[1:len(generation)-1])) # doesn't display the boundary cells
 
 def main():
